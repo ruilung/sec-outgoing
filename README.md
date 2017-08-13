@@ -3,7 +3,7 @@ security outgoing connection
 collect UNKNOW network establish info
 
 1. set listen ports (services port that allow others to connect)
-2. set trust network zone (ip or subnet that service will connect to)
+2. set trust network zone (ip or subnet that server will connect to)
 3. multi ports or subnet with comma to split
 4. Get list of listening port
 5. get establish info
