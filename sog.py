@@ -8,6 +8,11 @@ import os.path
 #import yaml
 
 
+#globat var
+allow_listenport = []
+allow_trustzone = []
+
+
 def netlisten():
 # get listen port and listen program  and return it as a list
     proc_names = {}
@@ -39,6 +44,9 @@ def netestablish():
 
 def config_create():
 #create config file with json format
+    global allow_listenport
+    global allow_trustzone
+
     port=raw_input("input listen port (80,443...): ")
     portlist=port.split(",")
     for i in portlist:
@@ -59,8 +67,12 @@ def config_create():
     config_dict={}
     config_dict["port"]=portlist
     config_dict["zone"]=zonelist
+    allow_listenport=portlist
+    allow_trustzone=zonelist
+
     with open("config.json","w") as f:
         json.dump(config_dict,f, sort_keys = True, indent = 4)
+
 
 
 if __name__ == '__main__':
@@ -73,6 +85,7 @@ if __name__ == '__main__':
     else:
         config_create()
 
+
     listen_port = []
     nlist = netlisten()
 
@@ -80,8 +93,6 @@ if __name__ == '__main__':
         listen_port.append(l_port[0])
     # print listen_port
 
-    #allow_listenport = [80, 443]
-    #allow_trustzone = [ "192.168.11.1/24", "192.168.1.1/24","127.0.0.1"]
 
     elist = netestablish()
     # print elist   [[':port', 'ip'], and so on ...
