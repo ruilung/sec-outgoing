@@ -16,6 +16,7 @@ requirement
 ===========
 * [python](https://www.python.org/)
 * [psutils](https://pypi.python.org/pypi/psutil)
+* [netaddr](https://pypi.python.org/pypi/netaddr/0.7.19)
 
 
 
