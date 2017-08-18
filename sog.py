@@ -1,15 +1,15 @@
-import time
-import sys
 import psutil
-import socket
-import json
-import netaddr
 import os.path
+import json
+
+import netaddr
+import psutil
+
 #import yaml
 
 
 #globat var
-allow_listenport = []
+allow_remoteport = []
 allow_trustzone = []
 
 
@@ -44,7 +44,7 @@ def netestablish():
 
 def config_create():
 #create config file with json format
-    global allow_listenport
+    global allow_remoteport
     global allow_trustzone
 
     port=raw_input("input listen port (80,443...): ")
@@ -67,7 +67,7 @@ def config_create():
     config_dict={}
     config_dict["port"]=portlist
     config_dict["zone"]=zonelist
-    allow_listenport=portlist
+    allow_remoteport=portlist
     allow_trustzone=zonelist
 
     with open("config.json","w") as f:
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     if os.path.isfile("config.json"):
         with open("config.json") as f:
             jdata=json.load(f)
-        allow_listenport=jdata["port"]
+        allow_remoteport=jdata["port"]
         allow_trustzone=jdata["zone"]
     else:
         config_create()
@@ -103,12 +103,12 @@ if __name__ == '__main__':
     #print remote_ip
 
     empty_flag=1
-    for local_estab_port,remote_ip,remote_port in elist:
+    for local_estab_port, remote_ip, remote_port in elist:
         if local_estab_port not in listen_port:
             checkflag = 1
 
-            if allow_listenport:
-                if local_estab_port  in allow_listenport:
+            if allow_remoteport:
+                if str(remote_port) in allow_remoteport:
                     checkflag=0
 
             if allow_trustzone:
@@ -118,7 +118,7 @@ if __name__ == '__main__':
 
             if checkflag:
                 empty_flag=0
-                print local_estab_port,remote_ip,remote_port
+                print local_estab_port, remote_ip, remote_port
 
     if empty_flag:
         print "outgoing connections are clean"
