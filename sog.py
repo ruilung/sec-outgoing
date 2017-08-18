@@ -106,9 +106,16 @@ if __name__ == '__main__':
     for local_estab_port,remote_ip,remote_port in elist:
         if local_estab_port not in listen_port:
             checkflag = 1
-            for trust_zone in allow_trustzone:
-                if remote_ip  in netaddr.IPNetwork(trust_zone):
+
+            if allow_listenport:
+                if local_estab_port  in allow_listenport:
                     checkflag=0
+
+            if allow_trustzone:
+                for trust_zone in allow_trustzone:
+                    if remote_ip  in netaddr.IPNetwork(trust_zone):
+                        checkflag=0
+
             if checkflag:
                 empty_flag=0
                 print local_estab_port,remote_ip,remote_port
