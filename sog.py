@@ -12,9 +12,7 @@ import psutil
 allow_remoteport = []
 allow_trustzone = []
 
-
-def netlisten():
-# get listen port and listen program  and return it as a list
+def proc_list():
     proc_names = {}
     for p in psutil.process_iter():
         try:
@@ -24,6 +22,11 @@ def netlisten():
             pass
         except psutil.Error:
             pass
+    return proc_names
+
+def netlisten():
+# get listen port and listen program  and return it as a list
+    proc_names = proc_list()
     netlist=[]
     for c in psutil.net_connections(kind='inet'): #only receive ipv4 info
         if c.status=='LISTEN':
@@ -34,15 +37,7 @@ def netlisten():
 
 def netestablish():
 # get establish connection
-    proc_names = {}
-    for p in psutil.process_iter():
-        try:
-            proc_names[p.pid] = p.exe() #full path and program name
-        except psutil.AccessDenied:
-            proc_names[p.pid] = p.name () #only program name, windows system process will hit this
-            pass
-        except psutil.Error:
-            pass
+    proc_names=proc_list()
     estblist=[]
     for c in psutil.net_connections(kind='inet'):
         if c.status <> 'LISTEN' and c.raddr:
