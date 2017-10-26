@@ -1,4 +1,5 @@
-import psutil
+# -*- coding: utf8 -*-
+
 import os.path
 import json
 
@@ -42,7 +43,7 @@ def netestablish():
     for c in psutil.net_connections(kind='inet'):
         if c.status <> 'LISTEN' and c.raddr:
             # establish, time_wait, close_wait and so on...
-            estblist.append([  ":"+str(c.laddr[1]), c.raddr[0],c.raddr[1],proc_names.get(c.pid, '?')  ] )
+            estblist.append([  ":"+str(c.laddr[1]), c.raddr[0],c.raddr[1],proc_names.get(c.pid, '?'), c.status  ] )
 
     return estblist
 
@@ -108,7 +109,7 @@ if __name__ == '__main__':
     #print remote_ip
 
     empty_flag=1
-    for local_estab_port, remote_ip, remote_port,localap in elist:
+    for local_estab_port, remote_ip, remote_port,localap, tcpstatus in elist:
         if local_estab_port not in listen_port:
             checkflag = 1
 
@@ -123,7 +124,7 @@ if __name__ == '__main__':
 
             if checkflag:
                 empty_flag=0
-                print localap,local_estab_port, remote_ip, remote_port
+                print localap,local_estab_port, remote_ip, remote_port , tcpstatus
 
     if empty_flag:
         print "outgoing connections are clean"
